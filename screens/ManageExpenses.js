@@ -1,4 +1,4 @@
-import { Text } from "react-native";
+import { Text, StyleSheet } from "react-native";
 
 function ManageExpenses(){
     return(
@@ -7,3 +7,7 @@ function ManageExpenses(){
 }
 
 export default ManageExpenses;
+
+const styles = StyleSheet.create({
+    
+});
