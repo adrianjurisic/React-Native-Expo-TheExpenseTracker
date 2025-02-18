@@ -1,12 +1,14 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Alert } from "react-native";
 import Input from "./Input";
 import { useState } from "react";
+import Button from "../UI/Button";
+import { getFormattedDate } from "../../util/date";
 
-function ExpenseForm(){
+function ExpenseForm({onCancel, onSubmit, submitLabel, defaultValues}){
     const [inputValues, setInputValues] = useState({
-        amount: '',
-        date: '',
-        description: '',
+        amount: defaultValues ? defaultValues.amount.toFixed(2).toString() : '',
+        date: defaultValues ? getFormattedDate(defaultValues.date) : '',
+        description: defaultValues ? defaultValues.description : '',
     });
 
     function inputChangeHandler(inputIdentifier, enteredValue){
@@ -16,6 +18,32 @@ function ExpenseForm(){
                 [inputIdentifier]: enteredValue
             };
         });
+    }
+
+    function submitHandler(){
+        const expenseData = {
+            amount: +inputValues.amount,
+            date: new Date(inputValues.date),
+            description: inputValues.description
+        };
+
+        const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
+        const dateIsValid = expenseData.date.toString() !== 'Invalid Date';
+        const descriptionIsValid = expenseData.description.trim().length > 0;
+        if(!amountIsValid && !dateIsValid && !descriptionIsValid){
+            Alert.alert('Invalid input', 'Please fill out hte form!');
+            return;
+        }else if(!amountIsValid){
+            Alert.alert('Invalid input', 'Please enter a positive number for a amount!');
+            return;
+        }else if(!dateIsValid){
+            Alert.alert('Invalid input', 'Please enter a date in form "YYYY-MM-DD"!');
+            return;
+        }else if(!descriptionIsValid){
+            Alert.alert('Invalid input', 'Enter a description!');
+            return;
+        }
+        onSubmit(expenseData);
     }
 
     return(
@@ -40,6 +68,10 @@ function ExpenseForm(){
                 onChangeText: inputChangeHandler.bind(this, 'description'),
                 value: inputValues.description,
             }}/>
+            <View style={styles.buttons}>
+                <Button mode={'flat'} onPress={onCancel} style={styles.button}>Cancel</Button>
+                <Button onPress={submitHandler} style={styles.button}>{submitLabel}</Button>
+            </View>
         </View>
     );
 }
@@ -64,5 +96,15 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: 'center',
         marginVertical: 24,
-    }
+    },
+    buttons: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 20,
+    },
+    button: {
+        minWidth: 120,
+        marginHorizontal: 8,
+    },
 });
