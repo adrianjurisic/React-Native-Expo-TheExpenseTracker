@@ -57,19 +57,19 @@ function ExpenseForm({onCancel, onSubmit, submitLabel, defaultValues}){
         <View style={styles.form}>
             <Text style={styles.title}>Your Expense</Text>
             <View style={styles.inputsRow}>
-                <Input label={"Amount"} style={styles.rowInput} invalid={inputs.amount.isValid} textInputConfig={{
+                <Input label={"Amount"} style={styles.rowInput} valid={inputs.amount.isValid} textInputConfig={{
                     keyboardType: 'decimal-pad',
                     onChangeText: inputChangeHandler.bind(this, 'amount'),
                     value: inputs.amount.value,
                 }}/>
-                <Input label={"Date"} style={styles.rowInput} invalid={inputs.date.isValid} textInputConfig={{
+                <Input label={"Date"} style={styles.rowInput} valid={inputs.date.isValid} textInputConfig={{
                     placeholder: 'YYYY-MM-DD',
                     maxLength: 10,
                     onChangeText: inputChangeHandler.bind(this, 'date'),
                     value: inputs.date.value,
                 }}/>           
             </View>
-            <Input label={"Description"} invalid={inputs.description.isValid} textInputConfig={{
+            <Input label={"Description"} valid={inputs.description.isValid} textInputConfig={{
                 multiline: true,
                 autoCorrect: false,
                 onChangeText: inputChangeHandler.bind(this, 'description'),
